@@ -1,0 +1,85 @@
+import os
+import wave
+from google.cloud import storage, speech
+from google.oauth2 import service_account
+
+def gcs_speech_to_text(source_file_name):
+
+    # used to extract header information from the audio file
+    def get_wav_properties(wav_file_path):
+        with wave.open(wav_file_path, 'rb') as wav_file:
+            sample_rate = wav_file.getframerate()
+            sample_width = wav_file.getsampwidth()
+            num_channels = wav_file.getnchannels()
+            return sample_rate, sample_width, num_channels
+
+    def upload_blob(bucket_name, source_file_name, destination_blob_name):
+        """Uploads a file to the bucket."""
+        storage_client = storage.Client(credentials=credentials)
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_filename(source_file_name)
+
+        print(f"File {source_file_name} uploaded to {destination_blob_name}.")
+
+    # Construct the credentials JSON
+    credentials_json = {
+    "type": "service_account",
+    "project_id": "vaulted-timing-412501",
+    "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDyRxKlJgt3o496\nQR4HMbZhA3aGCD4h28F1X9cT4CRpl1F5DE3j9lFjvw/FZYh03PeZWoDPj0GdR0Fs\n6JgAqtGmgHxJYlT2KHtzSCXcDzsE7jgQ20xOuI6u64MnWU3xshiWMyrPzdBpVuoE\nQCX9qIPe8d19Z8cPC2C60HXfUXAPGY/AZBrmRV0wl8JZXdkbDJ2q6XaEkM82HkXp\n9oKZoscemFmK7lNZQb7IlMlB14DOLhpbk3oxbMJ6D4lWyGmZSKgP8rmNKpzDXCR3\ncUDzN7fhprCGBfZcsgWwSMFTVlHF+8ERTt0c7Y5IjVjw/9GDMkQxuQHJeoTJAQ6z\nhRuzRdAhAgMBAAECggEABjyMH1IuY2MDc3svobHG5xJmv6aAqvB0N2hDKhDP/yPV\nBg+qBZ82kyG87zDg5Vk2ymzI+g7O+pR1+661EvdStD2EdYMhesCqBNqrltGRjFvx\nd4Wdnj0j9x663o1u8zTJazxf8r9yiPOizH82OyRWWKvTLsI4HowFbmmlTx1SjCDo\nfiRwYkTshdrycZUsN5XJxjiFPvn90UmHDIBwIaZU/Z8L44e3ateOCj4QkppNUDgF\n6WCOBuM2DxOWyaCjf4YE8wGbuzz7AQ5Rxl4vrPscJMnYPnsnfqXnxDMCGzZ1a3nT\ng6v6EkMkaiqROZKNwPXf9mhAqVKkMg6M+ZVRofkizQKBgQD/BZbql4Uvc2XawM/D\n82k2Nmzm5w+GAlP7lRf73eJvZXyweriHHqVY5pxpOEqS5IA3/iWL2fEFz2dOBX88\nuHzft+softz3y2MRWccTqUgmuRDI6ZVaMb7upwJJOWEb+j6lQmjfuCXfEt47FcvI\nrX3Z8Db0yv+zhU/db9eddmWN4wKBgQDzNPg0mdHQJMSZqyBmEtkRkF0UBDPs5ZZX\nYKG7EsjlKPDxDnL14AVtC69pfwXiwZEIPct/pltFWTi3kRt62jE7D91Ev+SY+ZfU\nVuFBS1WF8c5ZrTk5tn9lBOikYOP3b+S3bT/dL8mN7g+4nmK5PY6kLlrjoZBJfsLK\nW8LbXf4JKwKBgQDXBQZ266RfGsRBShqjk+Mc04zErwM2sVXQJKhhM3cNB5u3TPGy\n85LkPySXzt+JtOGq1D0iCnMeu/3VGetq7f5TvsWmkjiLMVBpO7IPkMaF57oQPGox\n7wmWPPg/dwK6zSbuveyg3KoJyOXZGYqFvEoFbHVZtqMb4QYypW89k6sSkwKBgDgM\nCfMdS6PbBU+ghyvexhVtHnYhbdH3KsliJINXFeLxp2z19npBMR7rJXZ7ZmDWWNT8\nYKw/KyN1J0PuddW++L9yrXxNeKHkSyANEYYZlVDz46j46YoqS3t9QRu4lHCOYbf/\nvkr720gRB6B1J60myXt+j0WMExNM2hkGQoaJR6TXAoGBAMj473S8KTfW76LFq5gb\nq5SfFDwylby5EdgUpJqdWlBdv3fsNQ8y2l5vrNcr6g64CqVqpoWm4zZDjCPbtZs7\nsVH7TxFZ2G98jC5xznO0R+pDm9iJHTHvds8tTWZgqT3rw3ewvCKxek0TWm7BTb8o\n/d1Q18qm/pXWR03sYKsD8Xaz\n-----END PRIVATE KEY-----\n",
+    "client_email": "grace-liu@vaulted-timing-412501.iam.gserviceaccount.com",
+    "client_id": "108680015612408162352",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/grace-liu%40vaulted-timing-412501.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+    }
+
+    # Create credentials from the dictionary
+    credentials = service_account.Credentials.from_service_account_info(credentials_json)
+
+    # Set the GCS bucket name and construct the destination blob name
+    bucket_name = 'treehacksx'
+    file_name = os.path.basename(source_file_name)
+    destination_blob_name = f"audio-files/{file_name}"
+
+    # Upload the WAV file to GCS
+    upload_blob(bucket_name, source_file_name, destination_blob_name)
+
+    # Speech Client
+    client = speech.SpeechClient(credentials=credentials)
+
+    # Use the GCS URI of the uploaded file
+    gcs_uri = f"gs://{bucket_name}/{destination_blob_name}"
+
+    # Dynamically determine sample rate and encoding
+    sample_rate, sample_width, _ = get_wav_properties(source_file_name)
+    if sample_width == 2:
+        encoding = speech.RecognitionConfig.AudioEncoding.LINEAR16
+    else:
+        raise ValueError(f"Unsupported sample width: {sample_width}")
+
+    config = speech.RecognitionConfig(
+        encoding=encoding,
+        sample_rate_hertz=sample_rate,
+        language_code="en-US"
+    )
+    audio = speech.RecognitionAudio(uri=gcs_uri)
+    operation = client.long_running_recognize(config=config, audio=audio)
+    print("Waiting for operation to complete...")
+    response = operation.result(timeout=90)
+
+    # Compile the transcription into one string
+    output = ""
+    for result in response.results:
+        output = output + result.alternatives[0].transcript + ". "
+    
+    print(output + "\n--------------------------------------")
+    return output
+
+
+if __name__ == "__main__":
+    audio_file_path = '/Users/graceliu/Downloads/female.wav'
+    gcs_speech_to_text(audio_file_path)
