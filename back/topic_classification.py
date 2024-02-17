@@ -1,5 +1,6 @@
 import requests
-import together, os
+import together
+import os
 
 endpoint = 'https://api.together.xyz/inference'
 together.api_key = os.getenv("TOGETHER_API_KEY")
