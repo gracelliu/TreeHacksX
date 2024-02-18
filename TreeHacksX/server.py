@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Form, UploadFile
 from fastapi.responses import JSONResponse
 from io import BytesIO
 
-from transcript_analysis.gcp_speech_to_text import gcs_speech_to_text
+from back.transcript_analysis.gcp_speech_to_text import gcs_speech_to_text
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()

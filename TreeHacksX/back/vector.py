@@ -3,6 +3,8 @@ from sqlalchemy import create_engine, text
 from scipy.spatial.distance import cosine
 import time
 import together
+from transcript_analysis.topic_classification import *
+from transcript_analysis.sentiment_analysis import *
 
 threshold = 0.5
 
@@ -26,10 +28,16 @@ def insert_users(client, conn):
     # result = conn.execute(text(sql))
     # Load 
     for user_id in range(1, 3):
+        # sql = f"""
+        # DROP TABLE memory_user{str(user_id)}
+        # """
+        # result = conn.execute(text(sql))
         sql = f"""
         CREATE TABLE memory_user{str(user_id)} (
         id INT AUTO_INCREMENT PRIMARY KEY,
         value INT,
+        topic INT,
+        sentiment INT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """
@@ -139,12 +147,19 @@ def check_similarity(client, conn, image_id, description, user_id):
         stop = ['<human>', '\n\n']
         )
     
+    topic = topic_classification(description)
+    sentiment = sentiment_analysis(description)
+
+
     sql = f"""
-    INSERT INTO memory_user{str(user_id)} (value) VALUES (:value);
+    INSERT INTO memory_user{str(user_id)} (value, topic, sentiment) VALUES (:value, :topic, :sentiment);
     """
-    result = conn.execute(text(sql), {'value': 1})
+    print({'value': 1, 'topic': topic.strip(), 'sentiment': sentiment.strip()})
+    print({'value': 1, 'topic': int(topic.strip()), 'sentiment': int(sentiment.strip())})
+    result = conn.execute(text(sql), {'value': 1, 'topic': int(topic.strip()), 'sentiment': int(sentiment.strip())})
 
     print(output['output']['choices'][0]['text'])
+
 
     return {'result': True, 'output': output['output']['choices'][0]['text']}
 
