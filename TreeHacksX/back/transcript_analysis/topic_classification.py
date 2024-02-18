@@ -13,7 +13,7 @@ def topic_classification(transcript = "As seniors approach their later years, ma
             "prompt": f"""
             You are given a speech transcript, return its topic in the format "Topic Label: 'topic'".
             
-            The possible labels are: 1. Health and Wellness, 2. Family and Relationships, 3. Retirement Planning, 4. Leisure and Hobbies, 5. Technology, 6. Housing and Living Arrangements
+            The possible labels are: 1. Health, 2. Family, 3. Retirement, 4. Hobbies, 5. Technology, 6. Housing
             
             Here is the speech transcript: {transcript}
 
