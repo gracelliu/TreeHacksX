@@ -21,29 +21,29 @@ from dashboard.graphs import (
 from dashboard.navigation import dashboard_sidebar, navbar
 from dashboard.styles import BACKGROUND_COLOR, FONT_FAMILY
 
-
 # Content in a grid layout.
-
-
 def content_grid():
     return rx.chakra.grid(
         *[rx.chakra.grid_item(stat_card(*c), col_span=1, row_span=1) for c in stat_card_data],
         rx.chakra.grid_item(
+            rx.chakra.heading("Line Chart", size="md"),
             line_chart(data=line_chart_data, data_key="name", lines=lines),
             col_span=3,
             row_span=2,
         ),
         rx.chakra.grid_item(
+            rx.chakra.heading("Pie Chart", size="md"),
             pie_chart(data=pie_chart_data, data_key="value", name_key="name"),
             row_span=2,
             col_span=1,
         ),
-        rx.chakra.grid_item(table(tabular_data=tabular_data), col_span=4, row_span=2),
         rx.chakra.grid_item(
+            rx.chakra.heading("Area Chart", size="md"),
             area_chart(data=area_chart_data, data_key="name", areas=areas),
             col_span=3,
             row_span=2,
         ),
+        rx.chakra.grid_item(table(tabular_data=tabular_data), col_span=4, row_span=2),
         rx.chakra.grid_item(col_span=2, bg="lightgreen"),
         rx.chakra.grid_item(col_span=2, bg="yellow"),
         rx.chakra.grid_item(col_span=4, bg="orange"),
