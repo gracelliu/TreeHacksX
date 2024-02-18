@@ -3,6 +3,8 @@ from reflex.components.radix import themes as rdxt
 
 from dashboard.navigation import dashboard_sidebar, navbar
 from dashboard.styles import BACKGROUND_COLOR, FONT_FAMILY
+import requests
+import json
 
 
 class FormState(rx.State):
@@ -13,7 +15,6 @@ class FormState(rx.State):
         self.form_data = form_data
         print(self.form_data)
 
-
 def quiz() -> rx.Component:
     return rx.chakra.box(
         dashboard_sidebar,
@@ -21,51 +22,54 @@ def quiz() -> rx.Component:
             navbar(heading="Quiz"),
             rx.chakra.box(
                 rx.vstack(
-                    rx.form(
+                    # rx.form(
                         rdxt.text("Enter User ID"),
                         rx.vstack(
-                            rx.input(
-                                placeholder="User ID",
-                                name="user_id",
-                                type="number",
-                                required=True
-                            ),
-                            rx.spacer(spacing='8'),
-                            rdxt.text("image"),
-                            rx.spacer(spacing='8'),
-                            rdxt.text("caption"),
-                            rx.spacer(spacing='8'),
-                            rdxt.text(
-                                "click the button below to describe when and where this memory is from"),
-                            rx.alert_dialog.root(
-                                rx.alert_dialog.trigger(
-                                    rx.button("Click to talk"),
-                                ),
-                                rx.alert_dialog.content(
-                                    rx.alert_dialog.title(
-                                        "Talk in microphone"),
-                                    rx.chakra.Spacer(height="5px"),
-                                    rx.alert_dialog.description(
-                                        "Now just talk out loud",
+                            # rx.form(
+                                rx.flex(
+                                    rx.input(
+                                        placeholder="User ID",
+                                        name="user_id",
+                                        id="user-id",
+                                        type="number",
+                                        required=True
                                     ),
-                                    rx.chakra.Spacer(height="20px"),
-                                    rx.flex(
-                                        rx.alert_dialog.cancel(
-                                            rx.button("Cancel"),
-                                        ),
-                                        rx.alert_dialog.action(
-                                            rx.button("Done"),
-                                        ),
-                                        spacing="3",
-                                    ),
+                                    rx.button("Submit to see your memory card", id="userIdButton"),
+                                    direction="row",
+                                    spacing='3',
                                 ),
+                            #     on_submit=PhotoState.handle_submit, reset_on_submit=True
+                            # ),
+                            rx.spacer(spacing='8'),
+                            rx.card(
+                                rx.image(id='memory', sizes=3),
+                                rdxt.text(hidden=True, id='memoryId'),
+                                class_name='w-2/3'
                             ),
+                            rdxt.text("Talk about this memory", size='5'),
+                            rx.spacer(spacing='1'),
+                            rx.flex(
+                            rx.button("Start", id="startRecording"),
+                            rx.button("Stop", id="stopRecording"),
+                            rx.html("<canvas id='visualizerCanvas' width='700' height='50'></canvas>"),
+                            direction='row',
+                            justify='center',
+                            align='center',
+                            width='full',
+                            spacing='3',
+                            ),
+                            rdxt.card(
+                            rdxt.text("What you said:", size='2', class_name='w-full text-center'),
+                            rdxt.text(id="transcript", size='4'),
+                            class_name='bg-black'
+                            ),
+                                
                             rx.button("Submit", type="submit"),
                         ),
-                        on_submit=FormState.handle_submit,
-                        reset_on_submit=True,
-                    ),
-                    rx.text(FormState.form_data.to_string()),
+                    #     on_submit=FormState.handle_submit,
+                    #     reset_on_submit=True,
+                    # ),
+                                        rx.script(src='/transcription.js')
                 ),
                 margin_top="calc(50px +  2em)",
                 padding="3em",

@@ -10,7 +10,7 @@ def sentiment_analysis(message):
         json={
             "model": "togethercomputer/RedPajama-INCITE-7B-Base",
             "prompt": f"""\
-        Label the sentence as either "1: positive", "2: negative", "3: mixed", or "4: neutral":
+        Label the sentence as either "0: neutral", "1: positive", or "2: negative":
 
         Sentence: {message}
 

@@ -3,8 +3,8 @@ from sqlalchemy import create_engine, text
 from scipy.spatial.distance import cosine
 import time
 import together
-from transcript_analysis.topic_classification import *
-from transcript_analysis.sentiment_analysis import *
+from back.transcript_analysis.topic_classification import *
+from back.transcript_analysis.sentiment_analysis import *
 
 threshold = 0.5
 
@@ -88,17 +88,18 @@ def insert_photos(client, conn, csv_path):
 
     sql = f"""
     SELECT * from pictures
-            """
+    """
     result = conn.execute(text(sql))
-    # print(result.fetchall())
+    print(result.fetchall())
 
 def get_photo(conn, user_id):
     sql = text(f"""
     SELECT image_id, image_link FROM pictures 
-    WHERE user_id = {user_id}
-    LIMIT 1
+    WHERE user_id = {int(user_id)}
     """)
+    print(sql)
     results = conn.execute(sql).fetchall()
+    print(results)
     id, link = results[0]
     return { 'id': id, 'link': link }
 
@@ -168,14 +169,16 @@ def check_similarity(client, conn, image_id, description, user_id):
 
 if __name__ == "__main__":
     client, conn = create_connection()
-    insert_photos(client, conn, "data/photos.csv")
-    insert_users(client, conn)
-    check_similarity(client, conn, 1, "Educational tool for human success", 1)
-    check_similarity(client, conn, 1, "Ice skating with my favorite grandchildren", 1)
-    sql = text(f"""
-    SELECT * from memory_user1
-    """)
-    results = conn.execute(sql).fetchall()
-    print(results)
+
+    with conn.begin():
+        insert_photos(client, conn, "data/photos.csv")
+        insert_users(client, conn)
+        check_similarity(client, conn, 1, "Educational tool for human success", 1)
+        check_similarity(client, conn, 1, "Ice skating with my favorite grandchildren", 1)
+        sql = text(f"""
+        SELECT * from memory_user1
+        """)
+        results = conn.execute(sql).fetchall()
+        print(results)
 
     

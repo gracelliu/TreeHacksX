@@ -11,9 +11,7 @@ def topic_classification(transcript = "As seniors approach their later years, ma
         json={
             "model": "togethercomputer/RedPajama-INCITE-7B-Base",
             "prompt": f"""
-            You are given a speech transcript, return its topic in the format "Topic Label: 'topic'".
-            
-            The possible labels are: 1. Health, 2. Family, 3. Retirement, 4. Hobbies, 5. Technology, 6. Housing
+            Label the transcript with its corresponding topic as either "1: Health and Wellness", "2: Family and Relationships", "3: Retirement Planning", "4: Leisure and Hobbies", "5: Technology", "6: Healthcare and Social Services":
             
             Here is the speech transcript: {transcript}
 
