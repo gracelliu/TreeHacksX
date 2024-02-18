@@ -26,7 +26,7 @@ function myInitCode() {
     }
     
     // Construct the URL with parameters
-    const urlWithParams = new URL('http://localhost:8001/friends/');
+    const urlWithParams = new URL('http://localhost:8001/photo/');
     urlWithParams.search = new URLSearchParams(params).toString();
     fetch(urlWithParams, {
       method: 'GET',

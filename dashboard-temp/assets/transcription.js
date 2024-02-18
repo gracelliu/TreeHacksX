@@ -88,7 +88,7 @@ function myInitCode() {
       }
 
       new Promise(r => setTimeout(r, 2000)).then(() => {
-        window.location.href = "http://localhost:3000/fletchat"})
+        window.location.href = "http://localhost:3000/friends"})
 
     })
     .catch(error => {
