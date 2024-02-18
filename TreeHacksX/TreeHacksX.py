@@ -11,7 +11,7 @@ from TreeHacksX.transcript_analysis.gcp_speech_to_text import *
 
 import reflex as rx
 
-from fastapi import  HTTPException, Form
+from fastapi import  HTTPException, Form, UploadFile
 import base64
 from io import BytesIO
 
@@ -29,18 +29,22 @@ async def get_photo_link(user_id: int):
     client, conn = create_connection()
     return get_photo(conn, user_id)
 
-async def transcribe_audio(audio_data: bytes = Form(...)):
-    # Convert base64-encoded audio data to bytes
-    audio_bytes = base64.b64decode(audio_data)
+async def transcribe_audio(audio_file: UploadFile = Form(...)):
+    try:
+        # Read the audio file content
+        audio_content = await audio_file.read()
 
-    # Create a BytesIO object to simulate a file-like object
-    audio_file_like = BytesIO(audio_bytes)
+        # Use the BytesIO to create a file-like object
+        audio_file_like = BytesIO(audio_content)
 
-    # Call your GCP speech-to-text function
-    transcription_result = gcs_speech_to_text(audio_file_like)
+        # Call your GCP speech-to-text function
+        transcription_result = gcs_speech_to_text(audio_file_like)
 
-    # Return the transcription result
-    return {"transcription": transcription_result}
+        # Return the transcription result
+        return {"transcription": transcription_result }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
                         
 async def quiz_submit(client, conn, image_id: int, description: str, user_id: int):
     client, conn = create_connection()
@@ -49,8 +53,6 @@ async def quiz_submit(client, conn, image_id: int, description: str, user_id: in
 app.api.add_api_route("/photo", get_photo_link)
 app.api.add_api_route("/submit", quiz_submit)
 app.api.add_api_route("/transcribe", transcribe_audio)
-
-
 
 
 
