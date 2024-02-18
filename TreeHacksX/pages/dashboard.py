@@ -1,18 +1,83 @@
 """The dashboard page."""
-from TreeHacksX.templates import template
 
+from TreeHacksX.templates import template
 import reflex as rx
 from typing import List
+import dash
+from dash import dcc, html
+from dash.dependencies import Input, Output
+import plotly.graph_objs as go
+import pandas as pd
+import numpy as np
+
+
+# Generate a sample dataset
+np.random.seed(42)  # For reproducibility
+dates = pd.date_range(start="2024-01-01", periods=100, freq="D")
+values = np.random.rand(100)  # Generate 100 random values
 
 
 class TableState(rx.State):
-    data: List = [
-        ["Lionel", "Messi", "Lionel: Thanks for reaching out!"],
-        ["Christiano", "Ronaldo", "You: Looks like we share"],
-    ]
-    columns: List[str] = ["First Name", "Last Name", "Last Message"]
+
+    df = pd.DataFrame({"Date": dates, "Value": values})
+    df_bar = pd.DataFrame({"Date": dates, "Value": values})
+    df_heat = pd.DataFrame({"Date": dates, "Value": values})
+
+    def get_results(self):
+        # upload the audio
+
+        # run the model
+
+        # update your dataframes
+        df = pd.DataFrame({"Date": dates, "Value": values})
+
+    @rx.var
+    def line_graph(self, start_date="2024-01-01", end_date="2025-01-01") -> go.Figure:
+        # Filter dataframe based on selected date range
+        filtered_df = self.df[
+            (self.df["Date"] >= start_date) & (self.df["Date"] <= end_date)
+        ]
+
+        # Create figure
+        fig = go.Figure(
+            data=go.Scatter(
+                x=filtered_df["Date"], y=filtered_df["Value"], mode="lines+markers"
+            )
+        )
+
+        # Update layout
+        fig.update_layout(
+            title="Value over Time",
+            xaxis_title="Date",
+            yaxis_title="Value",
+            yaxis=dict(range=[0, 1]),
+        )
+
+        return fig
+
+    @rx.var
+    def bar_graph(self, start_date="2024-01-01", end_date="2025-01-01") -> go.Figure:
+
+        return
+
+    @rx.var
+    def heat_map(self, start_date="2024-01-01", end_date="2025-01-01") -> go.Figure:
+
+        return
 
 
+def graphing():
+    return rx.vstack(
+        rx.heading("line graph"),
+        rx.plotly(data=TableState.line_graph, height="400px"),
+        rx.heading("bar graph"),
+        rx.plotly(data=TableState.bar_graph, height="400px"),
+        rx.heading("heat map"), 
+        rx.plotly(data=TableState.heat_map, height="400px"),
+    )
+
+
+# layout of the page
 @template(route="/dashboard", title="Dashboard")
 def dashboard() -> rx.Component:
     """The dashboard page.
@@ -31,13 +96,12 @@ def dashboard() -> rx.Component:
     ]
 
     data2 = [
-    {"value": 100, "name": "Sent", "fill": "#8884d8"},
-    {"value": 80, "name": "Viewed", "fill": "#83a6ed"},
-    {"value": 50, "name": "Clicked", "fill": "#8dd1e1"},
-    {"value": 40, "name": "Add to Cart", "fill": "#82ca9d"},
-    {"value": 26, "name": "Purchased", "fill": "#a4de6c"},
-]
-    
+        {"value": 100, "name": "Sent", "fill": "#8884d8"},
+        {"value": 80, "name": "Viewed", "fill": "#83a6ed"},
+        {"value": 50, "name": "Clicked", "fill": "#8dd1e1"},
+        {"value": 40, "name": "Add to Cart", "fill": "#82ca9d"},
+        {"value": 26, "name": "Purchased", "fill": "#a4de6c"},
+    ]
 
     return rx.chakra.vstack(
         rx.chakra.heading("Dashboard", font_size="3em"),
@@ -63,36 +127,27 @@ def dashboard() -> rx.Component:
                                         rx.link(
                                             rx.flex(
                                                 rx.box(
-                                                    rx.text(
-                                                        "How are you, Joe?"
-                                                    ),
-                                                    rx.text(
-                                                        "|"
-                                                    ),
-                                                    rx.text(
-                                                        "Good Danilo, how r u?"
-                                                    ),
-                                                    rx.text(
-                                                        "|"
-                                                    ),
-                                                    rx.text(
-                                                        "Fine thank you"
-                                                    )
+                                                    rx.text("How are you, Joe?"),
+                                                    rx.text("|"),
+                                                    rx.text("Good Danilo, how r u?"),
+                                                    rx.text("|"),
+                                                    rx.text("Fine thank you"),
                                                 ),
                                                 spacing="5",
                                             ),
                                         ),
-                                        as_child=True
+                                        as_child=True,
                                     ),
                                     rx.spacer(),
                                     rx.container(
                                         rx.input(placeholder="Type here..."),
-                                        rx.button("Send",
-                                                  color_scheme="red",
-                                                  ),
-                                        spacing='2',
-                                        width='100%',
-                                        flex_grow=1
+                                        rx.button(
+                                            "Send",
+                                            color_scheme="red",
+                                        ),
+                                        spacing="2",
+                                        width="100%",
+                                        flex_grow=1,
                                     ),
                                     rx.spacer(),
                                     rx.flex(
@@ -125,36 +180,27 @@ def dashboard() -> rx.Component:
                                         rx.link(
                                             rx.flex(
                                                 rx.box(
-                                                    rx.text(
-                                                        "How are you, Joe?"
-                                                    ),
-                                                    rx.text(
-                                                        "|"
-                                                    ),
-                                                    rx.text(
-                                                        "Good Zahra, how r u?"
-                                                    ),
-                                                    rx.text(
-                                                        "|"
-                                                    ),
-                                                    rx.text(
-                                                        "Fine thank you"
-                                                    )
+                                                    rx.text("How are you, Joe?"),
+                                                    rx.text("|"),
+                                                    rx.text("Good Zahra, how r u?"),
+                                                    rx.text("|"),
+                                                    rx.text("Fine thank you"),
                                                 ),
                                                 spacing="5",
                                             ),
                                         ),
-                                        as_child=True
+                                        as_child=True,
                                     ),
                                     rx.spacer(),
                                     rx.container(
                                         rx.input(placeholder="Type here..."),
-                                        rx.button("Send",
-                                                  color_scheme="red",
-                                                  ),
-                                        spacing='2',
-                                        width='100%',
-                                        flex_grow=1
+                                        rx.button(
+                                            "Send",
+                                            color_scheme="red",
+                                        ),
+                                        spacing="2",
+                                        width="100%",
+                                        flex_grow=1,
                                     ),
                                     rx.spacer(),
                                     rx.flex(
@@ -187,36 +233,27 @@ def dashboard() -> rx.Component:
                                         rx.link(
                                             rx.flex(
                                                 rx.box(
-                                                    rx.text(
-                                                        "How are you, Joe?"
-                                                    ),
-                                                    rx.text(
-                                                        "|"
-                                                    ),
-                                                    rx.text(
-                                                        "Good Jasper, how r u?"
-                                                    ),
-                                                    rx.text(
-                                                        "|"
-                                                    ),
-                                                    rx.text(
-                                                        "Fine thank you"
-                                                    )
+                                                    rx.text("How are you, Joe?"),
+                                                    rx.text("|"),
+                                                    rx.text("Good Jasper, how r u?"),
+                                                    rx.text("|"),
+                                                    rx.text("Fine thank you"),
                                                 ),
                                                 spacing="5",
                                             ),
                                         ),
-                                        as_child=True
+                                        as_child=True,
                                     ),
                                     rx.spacer(),
                                     rx.container(
                                         rx.input(placeholder="Type here..."),
-                                        rx.button("Send",
-                                                  color_scheme="red",
-                                                  ),
-                                        spacing='2',
-                                        width='100%',
-                                        flex_grow=1
+                                        rx.button(
+                                            "Send",
+                                            color_scheme="red",
+                                        ),
+                                        spacing="2",
+                                        width="100%",
+                                        flex_grow=1,
                                     ),
                                     rx.spacer(),
                                     rx.flex(
@@ -243,42 +280,39 @@ def dashboard() -> rx.Component:
         ),
         rx.chakra.heading("Chart 1", font_size="1em"),
         rx.recharts.area_chart(
-            rx.recharts.area(
-                data_key="uv", stroke="#8884d8", fill="#8884d8"
-            ),
+            rx.recharts.area(data_key="uv", stroke="#8884d8", fill="#8884d8"),
             rx.recharts.x_axis(data_key="Your Vitals"),
             rx.recharts.y_axis(),
             data=data,
         ),
         rx.chakra.heading("Chart 2", font_size="1em"),
         rx.recharts.bar_chart(
-            rx.recharts.bar(
-                data_key="uv", stroke="#8884d8", fill="#8884d8"
-            ),
+            rx.recharts.bar(data_key="uv", stroke="#8884d8", fill="#8884d8"),
             rx.recharts.x_axis(data_key="name"),
             rx.recharts.y_axis(),
             data=data,
         ),
         rx.chakra.heading("Chart 3", font_size="1em"),
         rx.recharts.funnel_chart(
-    rx.recharts.funnel(
-        rx.recharts.label_list(
-            position="right",
-            data_key="name",
-            fill="#000",
-            stroke="none",
+            rx.recharts.funnel(
+                rx.recharts.label_list(
+                    position="right",
+                    data_key="name",
+                    fill="#000",
+                    stroke="none",
+                ),
+                rx.recharts.label_list(
+                    position="right",
+                    data_key="name",
+                    fill="#000",
+                    stroke="none",
+                ),
+                data_key="value",
+                data=data2,
+            ),
+            rx.recharts.graphing_tooltip(),
+            width=730,
+            height=250,
         ),
-        rx.recharts.label_list(
-            position="right",
-            data_key="name",
-            fill="#000",
-            stroke="none",
-        ),
-        data_key="value",
-        data=data2,
-    ),
-    rx.recharts.graphing_tooltip(),
-    width=730,
-    height=250,
-)
+        graphing(),
     )
