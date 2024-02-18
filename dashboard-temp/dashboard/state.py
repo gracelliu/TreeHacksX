@@ -3,6 +3,7 @@ import requests
 import json
 import openai
 import reflex as rx
+import flet as ft
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 openai.api_base = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
@@ -10,10 +11,14 @@ openai.api_base = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
 BAIDU_API_KEY = os.getenv("BAIDU_API_KEY")
 BAIDU_SECRET_KEY = os.getenv("BAIDU_SECRET_KEY")
 
+# GETSTREAM_API_KEY = os.getenv("GETSTREAM_API_KEY")
+# GETSTREAM_SECRET_KEY = os.getenv("GETSTREAM_API_KEY")
 
-if not openai.api_key and not BAIDU_API_KEY:
-    raise Exception("Please set OPENAI_API_KEY or BAIDU_API_KEY")
+# if not openai.api_key and not BAIDU_API_KEY:# and not GETSTREAM_API_KEY:
+#     raise Exception("Please set OPENAI_API_KEY or BAIDU_API_KEY or GETSTREAM_API_KEY")
 
+# client = Stream(api_key=GETSTREAM_API_KEY, api_secret=GETSTREAM_SECRET_KEY)
+# chat_instance = client.chat
 
 def get_access_token():
     """
@@ -64,7 +69,7 @@ class State(rx.State):
     # Whether the modal is open.
     modal_open: bool = False
 
-    api_type: str = "baidu" if BAIDU_API_KEY else "openai"
+    api_type: str =  "baidu" if BAIDU_API_KEY else "openai"
 
     def create_chat(self):
         """Create a new chat."""
