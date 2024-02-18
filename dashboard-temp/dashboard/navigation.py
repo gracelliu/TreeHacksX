@@ -66,9 +66,9 @@ def sidebar(
 dashboard_sidebar = sidebar(
     sidebar_link(text="Dashboard", href="/", icon="bar_chart_3"),
     sidebar_link(text="Friends", href="/friends", icon="message-square-more"),
-    sidebar_link(text="Quiz", href="/quiz", icon="help-circle"),
+    sidebar_link(text="Memory Card", href="/memory", icon="spade"),
     logo_src="/logo.jpg",
-    heading="REFLEX",
+    heading="",
 )
 
 

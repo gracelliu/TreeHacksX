@@ -6,7 +6,7 @@ THEME = rdxt.theme(
     appearance="light",
     has_background=True,
     radius="large",
-    accent_color="iris",
+    accent_color="green",
     scaling="100%",
     panel_background="solid",
 )

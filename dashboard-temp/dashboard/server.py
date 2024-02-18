@@ -31,7 +31,7 @@ async def get_photo_link(user_id: int):
         return get_photo(conn, user_id)
                         
 @app.get("/submit")
-async def quiz_submit(client, conn, image_id: int, description: str, user_id: int):
+async def quiz_submit(image_id: int, description: str, user_id: int):
     client, conn = create_connection()
     while conn.begin():
         return check_similarity(client, conn, image_id, description, user_id)

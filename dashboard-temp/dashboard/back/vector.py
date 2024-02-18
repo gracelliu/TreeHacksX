@@ -146,7 +146,7 @@ def check_similarity(client, conn, image_id, description, user_id):
     prompt = f"""
     Imagine you are an chat introducer starting off a chat between two seniors, introducing two seniors to each other who share a similar memory. Provide information and guiding questions to help them get to know each other.
     Senior 1 has a memory related to {description}. Senior 2 has a memory related to {results[0][3]}. Think about how to connect these two memories together.
-    Now start introducing the 2 seniors, describing them to each other and provide some guiding questions for them (do not include any conversations from the seniors, imagine this is ONLY the first message):
+    Now start introducing the 2 seniors, describing them to each other and provide some guiding questions for them (do not include any conversations from the seniors, imagine this is ONLY the first message, max of one paragraph of 100 words):
     """
 
     output = together.Complete.create(
@@ -165,7 +165,8 @@ def check_similarity(client, conn, image_id, description, user_id):
     result = conn.execute(text(memsql), {'value': 1, 'topic': topicInt, 'sentiment': sentimentInt})
 
 
-    return {'result': True, 'output': output['output']['choices'][0]['text']}
+    print(results[0][2], results[0][3])
+    return {'result': True, 'result_string': f"You\'ve been matched with user {results[0][2]} who enjoys {results[0][3]}! Enjoy your conversation.", 'output': output['output']['choices'][0]['text']}
 
 if __name__ == "__main__":
     client, conn = create_connection()

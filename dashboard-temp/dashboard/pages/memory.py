@@ -19,7 +19,7 @@ def quiz() -> rx.Component:
     return rx.chakra.box(
         dashboard_sidebar,
         rx.chakra.box(
-            navbar(heading="Quiz"),
+            navbar(heading="Memory Card"),
             rx.chakra.box(
                 rx.vstack(
                     # rx.form(
@@ -62,9 +62,11 @@ def quiz() -> rx.Component:
                             rdxt.text("What you said:", size='2', class_name='w-full text-center'),
                             rdxt.text(id="transcript", size='4'),
                             class_name='bg-black'
+                            ),                                
+                            rx.button("Submit", id="submitButton"),
+                            rdxt.card(
+                                rdxt.text(id="badge")
                             ),
-                                
-                            rx.button("Submit", type="submit"),
                         ),
                     #     on_submit=FormState.handle_submit,
                     #     reset_on_submit=True,

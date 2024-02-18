@@ -15,6 +15,8 @@ function myInitCode() {
   const stopRecordingButton = document.getElementById('stopRecording');
   const visualizerCanvas = document.getElementById('visualizerCanvas');
   const canvasContext = visualizerCanvas.getContext('2d');
+  const transcript = document.getElementById('transcript');
+  const submitButton = document.getElementById('submitButton');
   const memory = document.getElementById('memory');
   const memoryId = document.getElementById('memoryId');
   let mediaRecorder;
@@ -27,6 +29,7 @@ function myInitCode() {
 
   const userIdButton = document.getElementById('userIdButton');
   const userIdInput = document.getElementById('user-id');
+  const badge = document.getElementById('badge');
 
   
   userIdButton.addEventListener('click', () => {
@@ -57,6 +60,42 @@ function myInitCode() {
     });
   })
 
+  submitButton.addEventListener('click', () => {
+    const user_id = userIdInput.value;
+    const image_id = memoryId.innerText;
+    const description = transcript.innerText;
+    // Replace 'param1' and 'param2' with your parameter names and values
+    const params = new URLSearchParams();
+
+    params.append('user_id', user_id);
+    params.append('image_id', image_id);
+    params.append('description', description);
+
+
+    
+    // Construct the URL with parameters
+    const urlWithParams = new URL('http://localhost:8001/submit/');
+    urlWithParams.search = new URLSearchParams(params).toString();
+    fetch(urlWithParams, {
+      method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (!data.result) {
+        badge.innerHTML = 'Your response does not seem to match your memory, please try again!'
+      } else {
+        badge.innerHTML = data.result_string
+      }
+
+      new Promise(r => setTimeout(r, 2000)).then(() => {
+        window.location.href = "http://localhost:3000/fletchat"})
+
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  })
+
   startRecordingButton.addEventListener('click', () => {
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
@@ -76,7 +115,7 @@ function myInitCode() {
 
         mediaRecorder.onstop = () => {
           const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-
+          audioChunks = []
           clearInterval(visualizerInterval);
           // clearInterval(timerInterval);
 
