@@ -9,6 +9,34 @@ from dashboard.components.chat import action_bar, chat
 # from reflex.vars import Var
 
 # from stream-chat import StreamChat
+# import os, requests
+
+# from reflex.components.component import Component
+# from typing import Any, Dict, List, Union
+# from reflex.vars import Var
+
+# from stream-chat import StreamChat
+
+
+# class Chat(rx.Component):
+#     library = "stream-chat-react"
+#     tag = "Chat"
+#     import os
+#     api_key: rx.Var[str] = os.getenv("GETSTREAM_API_KEY")
+#     secret_key = os.getenv("GETSTREAM_API_KEY")
+#     is_default = True
+
+#     def __init__(self):
+#         super.__init__()
+#         self.client = StreamChat(api_key=self.api_key, api_secret=self.secret_key)
+#         self.token = self.client.create_token("user")
+
+    
+# class Channel(rx.Component):
+#     library = "stream-chat-react"
+#     tag = "Channel"
+    
+#     def __init__(self, ):
 
 
 # class Chat(rx.Component):
@@ -40,7 +68,7 @@ def friends() -> rx.Component:
             navbar(heading="Friends"),
             rx.chakra.box(
                 rx.text("Temp"),
-                rx.html('<iframe src="http://127.0.0.1:4000">'),
+                rx.html('<iframe src="http://127.0.0.1:4000" style="width:100%; height:80vh; overflow:hidden; margin:0px; padding:0px; border:none;">'),
                   # chat(),
                 # action_bar(),
                 margin_top="calc(50px + 2em)",
@@ -52,3 +80,6 @@ def friends() -> rx.Component:
         font_family=FONT_FAMILY,
         padding_bottom="4em",
     )
+
+# idk just a placeholder for now
+print("hello")
