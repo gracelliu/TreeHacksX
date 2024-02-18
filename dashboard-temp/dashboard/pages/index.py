@@ -75,7 +75,10 @@ def content_grid():
         ),
 
         # friend table
-        rx.chakra.grid_item(table(tabular_data=tabular_data), col_span=4, row_span=2),
+        rx.chakra.grid_item(
+            rx.chakra.heading("Friends", size="md"),
+            table(tabular_data=tabular_data), col_span=4, row_span=2
+        ),
 
         # formatting
         rx.chakra.grid_item(col_span=2, bg="lightgreen"),
