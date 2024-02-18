@@ -22,6 +22,3 @@ def friends() -> rx.Component:
         font_family=FONT_FAMILY,
         padding_bottom="4em",
     )
-
-# idk just a placeholder for now
-print("hello")
