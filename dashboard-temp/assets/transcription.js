@@ -11,9 +11,20 @@ if (document.readyState !== 'loading') {
 }
 
 function myInitCode() {
-  const startRecordingButton = document.getElementById('startRecordingButton');
-  const stopRecordingButton = document.getElementById('stopRecordingButton');
-  const timerDisplay = document.getElementById('timer');
+  const startRecordingButton = document.getElementById('startRecording');
+  const stopRecordingButton = document.getElementById('stopRecording');
+  const visualizerCanvas = document.getElementById('visualizerCanvas');
+  const canvasContext = visualizerCanvas.getContext('2d');
+  const memory = document.getElementById('memory');
+  const memoryId = document.getElementById('memoryId');
+  let mediaRecorder;
+  let audioChunks = [];
+  let analyser;
+  let dataArray;
+  let recordingStartTime;
+  let visualizerInterval;
+  // let timerInterval;
+
   const userIdButton = document.getElementById('userIdButton');
   const userIdInput = document.getElementById('user-id');
 
@@ -37,6 +48,8 @@ function myInitCode() {
       const transcriptText = document.getElementById('transcript');
       transcriptText.innerHTML = data.transcription
       audioChunks = []
+      memory.src = data.link;
+      memoryId.innerHTML = data.id;
 
     })
     .catch(error => {
@@ -44,35 +57,37 @@ function myInitCode() {
     });
   })
 
-  let mediaRecorder;
-  let audioChunks = [];
-  let recordingStartTime;
-  
   startRecordingButton.addEventListener('click', () => {
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
         mediaRecorder = new MediaRecorder(stream);
-  
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(analyser);
+        analyser.fftSize = 256;
+        dataArray = new Uint8Array(analyser.fftSize / 2);
+
         mediaRecorder.ondataavailable = event => {
           if (event.data.size > 0) {
             audioChunks.push(event.data);
           }
         };
-  
+
         mediaRecorder.onstop = () => {
           const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-          const audioUrl = URL.createObjectURL(audioBlob);
-          audioPlayer.src = audioUrl;
-          audioPlayer.controls = true;
-  
+
+          clearInterval(visualizerInterval);
+          // clearInterval(timerInterval);
+
           // You can send the audioBlob to the server here
           sendAudioToServer(audioBlob);
         };
-  
+
         recordingStartTime = new Date().getTime();
-        updateTimer();
-        setInterval(updateTimer, 1000); // Update timer every second
-  
+        updateVisualizer();
+        visualizerInterval = setInterval(updateVisualizer, 50); // Update visualizer every 50 milliseconds
+
         mediaRecorder.start();
         startRecordingButton.disabled = true;
         stopRecordingButton.disabled = false;
@@ -81,7 +96,7 @@ function myInitCode() {
         console.error('Error accessing microphone:', error);
       });
   });
-  
+
   stopRecordingButton.addEventListener('click', () => {
     if (mediaRecorder.state !== 'inactive') {
       mediaRecorder.stop();
@@ -89,13 +104,31 @@ function myInitCode() {
       stopRecordingButton.disabled = true;
     }
   });
+
+  function updateVisualizer() {
+    analyser.getByteFrequencyData(dataArray);
+    drawVisualizer();
+  }
+
+  function drawVisualizer() {
+    canvasContext.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+    const barWidth = visualizerCanvas.width / dataArray.length;
   
-  function updateTimer() {
-    const currentTime = new Date().getTime();
-    const elapsedTime = Math.floor((currentTime - recordingStartTime) / 1000);
-    timerDisplay.innerText = `Recording time: ${elapsedTime} seconds`;
+    for (let i = 0; i < dataArray.length; i++) {
+      const barHeight = dataArray[i] / 2;
+      const x = i * barWidth;
+      const y = visualizerCanvas.height - barHeight;
+  
+      const red = Math.floor((barHeight / 2) + 173); // Transition towards the red component of light blue
+      const green = Math.floor((barHeight / 2) + 216); // Transition towards the green component of light blue
+      const blue = 230; // Starting from a light blue color
+  
+      canvasContext.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+      canvasContext.fillRect(x, y, barWidth, barHeight);
+    }
   }
   
+
 }
 
 function sendAudioToServer(audioBlob) {

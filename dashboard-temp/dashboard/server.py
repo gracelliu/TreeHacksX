@@ -5,6 +5,8 @@ from io import BytesIO
 from back.transcript_analysis.gcp_speech_to_text import gcs_speech_to_text
 from fastapi.middleware.cors import CORSMiddleware
 
+from back.vector import *
+
 app = FastAPI()
 
 # Set up CORS
@@ -22,6 +24,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/photo/")
+async def get_photo_link(user_id: int):
+    client, conn = create_connection()
+    while conn.begin():
+        return get_photo(conn, user_id)
+                        
+@app.get("/submit")
+async def quiz_submit(client, conn, image_id: int, description: str, user_id: int):
+    client, conn = create_connection()
+    while conn.begin():
+        return check_similarity(client, conn, image_id, description, user_id)
 
 @app.post("/transcribe/")
 async def transcribe_audio(audio_data: UploadFile = Form(...)):
