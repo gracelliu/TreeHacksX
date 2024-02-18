@@ -18,15 +18,15 @@ Paragraphs:
 prompt = f"<human>: {temp}\n<bot>:"
 
 output = together.Complete.create(
-  prompt = prompt, 
-  model = "meta-llama/Llama-2-70b-chat-hf",
-  max_tokens = 1000,
-  temperature = 0.3,
-  top_k = 60,
-  top_p = 0.6,
-  repetition_penalty = 1.1,
-  stop = ["Explanation"],
+    prompt=prompt,
+    model="meta-llama/Llama-2-70b-chat-hf",
+    max_tokens=1000,
+    temperature=0.3,
+    top_k=60,
+    top_p=0.6,
+    repetition_penalty=1.1,
+    stop=["Explanation"],
 )
 
 # print generated text
-print(output['output']['choices'][0]['text'])
+print(output["output"]["choices"][0]["text"])
