@@ -2,48 +2,82 @@
 
 import reflex as rx
 from reflex.components.radix import themes as rdxt
+
 from dashboard.data import (
     line_chart_data,
     lines,
     pie_chart_data,
-    area_chart_data,
-    areas,
+    mood_lines,
+    mood_chart_data,
     stat_card_data,
+    bar_chart_data,
+    bars,
     tabular_data,
+    radar_chart_data,
 )
 from dashboard.graphs import (
-    area_chart,
     line_chart,
     pie_chart,
     stat_card,
+    bar_chart,
     table,
+    radar_chart
 )
 from dashboard.navigation import dashboard_sidebar, navbar
 from dashboard.styles import BACKGROUND_COLOR, FONT_FAMILY
 
+
 # Content in a grid layout.
 def content_grid():
     return rx.chakra.grid(
+        
+        # Stat cards.
         *[rx.chakra.grid_item(stat_card(*c), col_span=1, row_span=1) for c in stat_card_data],
+        
+        # Cognitive performance line chart.
         rx.chakra.grid_item(
-            rx.chakra.heading("Line Chart", size="md"),
+            rx.chakra.heading("Cognitive Performance Over Time", size="md"),
             line_chart(data=line_chart_data, data_key="name", lines=lines),
-            col_span=3,
+            col_span=4,
             row_span=2,
         ),
+
+        # Remember vs dont remember cards Bar chart
         rx.chakra.grid_item(
-            rx.chakra.heading("Pie Chart", size="md"),
+            rx.chakra.heading("Daily Memory Recall Performance", size="md"),
+            bar_chart(data=bar_chart_data, data_key="value", bars=bars),
+            col_span=4,
+            row_span=2,
+        ),
+        
+        # Mood line chart.
+        rx.chakra.grid_item(
+            rx.chakra.heading("Mood over time", size="md"),
+            line_chart(data=mood_chart_data, data_key="name", lines=mood_lines),
+            col_span=4,
+            row_span=2,
+        ),
+        
+        # catergory Pie chart.
+        rx.chakra.grid_item(
+            rx.chakra.heading("Category of Memory Cards", size="md"),
             pie_chart(data=pie_chart_data, data_key="value", name_key="name"),
-            row_span=2,
-            col_span=1,
+            col_span=4,
+            row_span=3,
         ),
+
+        # Radar chart
         rx.chakra.grid_item(
-            rx.chakra.heading("Area Chart", size="md"),
-            area_chart(data=area_chart_data, data_key="name", areas=areas),
-            col_span=3,
-            row_span=2,
+            rx.chakra.heading("Relative Memory Strengths per Category", size="md"),
+            radar_chart(data=radar_chart_data),
+            col_span=4,
+            row_span=1,
         ),
+
+        # friend table
         rx.chakra.grid_item(table(tabular_data=tabular_data), col_span=4, row_span=2),
+
+        # formatting
         rx.chakra.grid_item(col_span=2, bg="lightgreen"),
         rx.chakra.grid_item(col_span=2, bg="yellow"),
         rx.chakra.grid_item(col_span=4, bg="orange"),

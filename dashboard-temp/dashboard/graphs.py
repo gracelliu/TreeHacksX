@@ -9,7 +9,7 @@ def card(*children, **props):
         **props,
     )
 
-
+# stat cards
 def stat_card(title: str, stat, delta) -> rx.Component:
     color = "var(--red-9)" if delta[0] == "-" else "var(--green-9)"
     arrow = "decrease" if delta[0] == "-" else "increase"
@@ -27,7 +27,7 @@ def stat_card(title: str, stat, delta) -> rx.Component:
         ),
     )
 
-
+# contact table
 def table(tabular_data: list[list]):
     return rdxt.table.root(
         rdxt.table.header(
@@ -51,10 +51,10 @@ def table(tabular_data: list[list]):
     )
 
 
+# line chart
 class Line(rx.Base):
     data_key: str
     stroke: str
-
 
 def line_chart(data: rx.Var | list[dict], data_key: str, lines: list[Line]):
     return card(
@@ -71,7 +71,27 @@ def line_chart(data: rx.Var | list[dict], data_key: str, lines: list[Line]):
         )
     )
 
+# bar chart
+class Bar(rx.Base):
+        data_key: str
+        fill: str
 
+def bar_chart(data: rx.Var | list[dict], data_key: str, bars: list[Bar]):
+    return card(
+        rx.recharts.bar_chart(
+            *[
+                rx.recharts.bar(data_key=bar.data_key, fill=bar.fill)
+                for bar in bars
+            ],
+        rx.recharts.x_axis(data_key="name"),
+        rx.recharts.y_axis(name="number of cards"),
+            rx.recharts.legend(),
+            data=data,
+            height=400,
+        )
+    )
+
+# pie chart
 def pie_chart(data: rx.Var | list[dict], data_key: str, name_key: str):
     return card(
         rx.recharts.pie_chart(
@@ -88,26 +108,47 @@ def pie_chart(data: rx.Var | list[dict], data_key: str, name_key: str):
         )
     )
 
-
-class Area(rx.Base):
+# radar chart
+class Radar(rx.Base):
     data_key: str
     stroke: str
     fill: str
 
-
-def area_chart(data: rx.Var | list[dict], data_key: str, areas: list[Area]):
+def radar_chart(data):
     return card(
-        rx.recharts.area_chart(
-            *[
-                rx.recharts.area(
-                    data_key=area.data_key, stroke=area.stroke, fill=area.fill
-                )
-                for area in areas
-            ],
-            rx.recharts.x_axis(data_key=data_key),
-            rx.recharts.y_axis(),
-            rx.recharts.legend(),
+        rx.recharts.radar_chart(
+            rx.recharts.radar(
+            data_key="A",
+            stroke="#8884d8",
+            fill="#8884d8",
+            ),
+            rx.recharts.polar_grid(),
+            rx.recharts.polar_angle_axis(data_key="topic"),
             data=data,
             height=400,
         )
     )
+
+
+# class Area(rx.Base):
+#     data_key: str
+#     stroke: str
+#     fill: str
+
+
+# def area_chart(data: rx.Var | list[dict], data_key: str, areas: list[Area]):
+#     return card(
+#         rx.recharts.area_chart(
+#             *[
+#                 rx.recharts.area(
+#                     data_key=area.data_key, stroke=area.stroke, fill=area.fill
+#                 )
+#                 for area in areas
+#             ],
+#             rx.recharts.x_axis(data_key=data_key),
+#             rx.recharts.y_axis(),
+#             rx.recharts.legend(),
+#             data=data,
+#             height=400,
+#         )
+#     )
