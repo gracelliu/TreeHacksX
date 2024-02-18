@@ -65,8 +65,8 @@ def sidebar(
 
 dashboard_sidebar = sidebar(
     sidebar_link(text="Dashboard", href="/", icon="bar_chart_3"),
-    sidebar_link(text="Tools", href="/tools", icon="settings"),
-    sidebar_link(text="Team", href="/team", icon="users"),
+    sidebar_link(text="Friends", href="/friends", icon="message-square-more"),
+    sidebar_link(text="Quiz", href="/quiz", icon="help-circle"),
     logo_src="/logo.jpg",
     heading="REFLEX",
 )
