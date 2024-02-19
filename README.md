@@ -1,68 +1,14 @@
-# Welcome to Reflex!
+## Overview
+MemoryLane is a groundbreaking web application designed to empower senior citizens by enabling them to relive and share cherished memories. Our platform addresses key issues faced by the aging population, such as social isolation, healthcare challenges, and neurodegenerative conditions, through a blend of technology and personal connection. With MemoryLane, users can journal important memories, connect with others through shared experiences, and provide valuable data for healthcare professionals to track and manage the signs of neurodegenerative conditions.
 
-This is the base Reflex template - installed when you run `reflex init`.
+### Features
+* __Journaling and Memory Recall__: A digital space for seniors to record, revisit, and share their life stories and cherished memories.
+* __AI-Powered Match and Chat System__: Leveraging advanced AI algorithms, users can connect and engage in meaningful conversations with others who have similar life experiences.
+* __Analytics Dashboard for Healthcare Professionals__: A comprehensive dashboard offering insights into key indicators of neurodegenerative conditions, aiding in early detection and intervention.
 
-If you want to use a different template, pass the `--template` flag to `reflex init`.
-For example, if you want a more basic starting point, you can run:
-
-```bash
-reflex init --template blank
-```
-
-## About this Template
-
-This template has the following directory structure:
-
-```bash
-├── README.md
-├── assets
-├── rxconfig.py
-└── {your_app}
-    ├── __init__.py
-    ├── components
-    │   ├── __init__.py
-    │   └── sidebar.py
-    ├── pages
-    │   ├── __init__.py
-    │   ├── dashboard.py
-    │   ├── index.py
-    │   └── settings.py
-    ├── styles.py
-    ├── templates
-    │   ├── __init__.py
-    │   └── template.py
-    └── {your_app}.py
-```
-
-See the [Project Structure docs](https://reflex.dev/docs/getting-started/project-structure/) for more information on general Reflex project structure.
-
-### Adding Pages
-
-In this template, the pages in your app are defined in `{your_app}/pages/`.
-Each page is a function that returns a Reflex component.
-For example, to edit this page you can modify `{your_app}/pages/index.py`.
-See the [pages docs](https://reflex.dev/docs/components/pages/) for more information on pages.
-
-In this template, instead of using `rx.add_page` or the `@rx.page` decorator,
-we use the `@template` decorator from `{your_app}/templates/template.py`.
-
-To add a new page:
-
-1. Add a new file in `{your_app}/pages/`. We recommend using one file per page, but you can also group pages in a single file.
-2. Add a new function with the `@template` decorator, which takes the same arguments as `@rx.page`.
-3. Import the page in your `{your_app}/pages/__init__.py` file and it will automatically be added to the app.
-
-
-### Adding Components
-
-In order to keep your code organized, we recommend putting components that are
-used across multiple pages in the `{your_app}/components/` directory.
-
-In this template, we have a sidebar component in `{your_app}/components/sidebar.py`.
-
-### Adding State
-
-As your app grows, we recommend using [substates](https://reflex.dev/docs/state/substates/)
-to organize your state.
-You can either define substates in their own files, or if the state is
-specific to a page, you can define it in the page file itself.
+### Built With
+__Reflex.dev__: Utilized for its robust capabilities in full-stack development entirely in Python, ensuring a clean and responsive user interface.
+__InterSystems IRIS__: Employs vector search and other database functionalities to support the backend of MemoryLane.
+__Together.AI__: Provides AI-driven embeddings for user matching, sentiment analysis, and generation of sample data for testing.
+__Google Cloud__: Implements speech-to-text functionality to enhance accessibility for users, making the platform more user-friendly for senior citizens.
+__Python & JavaScript__: The core technologies behind the development of MemoryLane, with a focus on Python for its versatility and ease of use.
