@@ -7,8 +7,8 @@ MemoryLane is a groundbreaking web application designed to empower senior citize
 * __Analytics Dashboard for Healthcare Professionals__: A comprehensive dashboard offering insights into key indicators of neurodegenerative conditions, aiding in early detection and intervention.
 
 ### Built With
-__Reflex.dev__: Utilized for its robust capabilities in full-stack development entirely in Python, ensuring a clean and responsive user interface.
-__InterSystems IRIS__: Employs vector search and other database functionalities to support the backend of MemoryLane.
-__Together.AI__: Provides AI-driven embeddings for user matching, sentiment analysis, and generation of sample data for testing.
-__Google Cloud__: Implements speech-to-text functionality to enhance accessibility for users, making the platform more user-friendly for senior citizens.
-__Python & JavaScript__: The core technologies behind the development of MemoryLane, with a focus on Python for its versatility and ease of use.
+* __Reflex.dev__: Utilized for its robust capabilities in full-stack development entirely in Python, ensuring a clean and responsive user interface.
+*__InterSystems IRIS__: Employs vector search and other database functionalities to support the backend of MemoryLane.
+* __Together.AI__: Provides AI-driven embeddings for user matching, sentiment analysis, and generation of sample data for testing.
+* __Google Cloud__: Implements speech-to-text functionality to enhance accessibility for users, making the platform more user-friendly for senior citizens.
+* __Python & JavaScript__: The core technologies behind the development of MemoryLane, with a focus on Python for its versatility and ease of use.
