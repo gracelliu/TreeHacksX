@@ -12,3 +12,8 @@ MemoryLane is a groundbreaking web application designed to empower senior citize
 * __Together.AI__: Provides AI-driven embeddings for user matching, sentiment analysis, and generation of sample data for testing.
 * __Google Cloud__: Implements speech-to-text functionality to enhance accessibility for users, making the platform more user-friendly for senior citizens.
 * __Python & JavaScript__: The core technologies behind the development of MemoryLane, with a focus on Python for its versatility and ease of use.
+
+
+__Devpost:__ https://devpost.com/software/memorylane-5aon4r
+
+__Demo:__ https://www.youtube.com/watch?v=4ZuY4dxeFHg
